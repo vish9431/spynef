@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000', 
+  baseURL: 'https://spyneb.onrender.com', 
 });
 
 api.interceptors.request.use((config) => {
@@ -12,7 +12,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://spyneb.onrender.com';
 
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return '/placeholder-car.jpg';

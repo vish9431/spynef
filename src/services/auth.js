@@ -23,6 +23,7 @@ export const isTokenValid = () => {
   }
 };
 
+
 export const getUserFromToken = () => {
   const token = getToken();
   if (!token) return null;
