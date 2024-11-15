@@ -17,37 +17,34 @@ const CarForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Create a FormData object
     const data = new FormData();
+    
     data.append('title', formData.title);
     data.append('description', formData.description);
     data.append('car_type', formData.car_type);
     data.append('company', formData.company);
     data.append('dealer', formData.dealer);
-
-    // Append each image file to the FormData object
-    formData.images.forEach((file) => data.append('images', file));
-
+  
+    formData.images.forEach((file) => {
+      if (file) data.append('images', file); 
+    });
+    
+      for (let [key, value] of data.entries()) {
+      console.log(key, value);
+    }
+  
     try {
-      const response = await carService.createCar(data);
+      await carService.createCar(data);
       navigate('/cars');
     } catch (err) {
-      // More detailed error handling
-      if (err.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        setError(err.response.data.detail || 'Error creating car');
-      } else if (err.request) {
-        // The request was made but no response was received
-        setError('No response from server');
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        setError('Error: ' + err.message);
-      }
-      console.error('Submission error:', err);
+      console.error("Submission error:", err);
+      const errorMessage =
+        err.response?.data?.detail?.map((error) => error.msg).join(", ") ||
+        "Error creating car";
+      setError(errorMessage);
     }
   };
+  
 
   const handleImageChange = (files) => {
     if (files.length + formData.images.length > 10) {

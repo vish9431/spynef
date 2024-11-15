@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { carService } from '../../services/api';
+import { carService, getImageUrl } from '../../services/api';
 
 const CarDetail = () => {
   const [car, setCar] = useState(null);
@@ -123,7 +123,7 @@ const CarDetail = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div className="space-y-4">
               <div>
@@ -140,7 +140,7 @@ const CarDetail = () => {
               {car.images.map((image, index) => (
                 <img
                   key={index}
-                  src={image}
+                  src={getImageUrl(image)}
                   alt={`${car.title} - ${index + 1}`}
                   className="w-full h-48 object-cover rounded-lg"
                 />

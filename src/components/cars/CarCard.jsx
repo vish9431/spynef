@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { carService } from '../../services/api';
+import { carService, getImageUrl } from '../../services/api';
+
 
 const CarCard = ({ car, onDelete }) => {
   const handleDelete = async () => {
@@ -16,9 +17,11 @@ const CarCard = ({ car, onDelete }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="relative h-48">
+       <div className="relative h-48">
         <img
-          src={car.images[0] || '/placeholder-car.jpg'}
+          src={car.images && car.images.length > 0 
+            ? getImageUrl(car.images[0]) 
+            : '/placeholder-car.jpg'}
           alt={car.title}
           className="w-full h-full object-cover"
         />

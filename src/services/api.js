@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000',  // adjust to your FastAPI backend URL
+  baseURL: 'http://localhost:8000', 
 });
 
 api.interceptors.request.use((config) => {
@@ -12,6 +12,16 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+const API_BASE_URL = 'http://localhost:8000';
+
+export const getImageUrl = (imagePath) => {
+  if (!imagePath) return '/placeholder-car.jpg';
+  const cleanPath = imagePath.replace(/^uploads\//, '');
+  return `${API_BASE_URL}/uploads/${cleanPath}`;
+};
+
+//export { authService, carService, getImageUrl };
+
 export const authService = {
   login: (email, password) =>
     api.post('/token', new URLSearchParams({ username: email, password })),
@@ -19,16 +29,13 @@ export const authService = {
 };
 
 export const carService = {
-  createCar: (carData) => {
-    const formData = new FormData();
-    Object.keys(carData).forEach(key => {
-      if (key === 'images') {
-        carData.images.forEach(image => formData.append('images', image));
-      } else {
-        formData.append(key, carData[key]);
-      }
+  createCar: (formData) => {
+    
+    return api.post('/cars/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
-    return api.post('/cars/', formData);
   },
   getCars: (search) => api.get('/cars/', { params: { search } }),
   getCar: (id) => api.get(`/cars/${id}`),
